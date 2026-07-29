@@ -1,0 +1,555 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* =============================================================================
+   Magic Show — Storefront Design Tokens
+
+   Same variable architecture as the admin dashboard (canvas -> surface ->
+   raised -> sunken -> overlay, an ink ramp, one brand accent, four semantic
+   tones), but the VALUES here are pinned to the original site's actual
+   brand identity: black/gray neutrals and an orange accent (#f97316,
+   Tailwind's orange-500 — see the original tailwind.config.ts
+   `theme.accent`/`theme.accentLight` and globals.css `--theme-accent`).
+   ============================================================================= */
+
+@theme {
+  --color-canvas: var(--c-canvas);
+  --color-surface: var(--c-surface);
+  --color-raised: var(--c-raised);
+  --color-sunken: var(--c-sunken);
+  --color-overlay: var(--c-overlay);
+
+  --color-line: var(--c-line);
+  --color-line-strong: var(--c-line-strong);
+
+  --color-ink: var(--c-ink);
+  --color-muted: var(--c-muted);
+  --color-faint: var(--c-faint);
+
+  --color-brand: var(--c-brand);
+  --color-brand-hover: var(--c-brand-hover);
+  --color-brand-fg: var(--c-brand-fg);
+  --color-brand-soft: var(--c-brand-soft);
+  --color-brand-ring: var(--c-brand-ring);
+
+  --color-positive: var(--c-positive);
+  --color-positive-soft: var(--c-positive-soft);
+  --color-caution: var(--c-caution);
+  --color-caution-soft: var(--c-caution-soft);
+  --color-critical: var(--c-critical);
+  --color-critical-soft: var(--c-critical-soft);
+  --color-accent-info: var(--c-info);
+  --color-accent-info-soft: var(--c-info-soft);
+
+  /* Font roles: one variable family (Geist), differentiated by weight and
+     tracking rather than a second typeface — matches the dashboard's use
+     of a single precise sans, with Geist Mono carrying prices, SKUs, and
+     eyebrow labels the way the dashboard uses it for tabular data. */
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, 'SFMono-Regular', monospace;
+
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  --ease-swift: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Retained numbered ramps: a lot of existing storefront markup addresses
+     shades directly (ink-200, rust-600, ...) rather than through the
+     semantic roles above. `ink-*` is standard Tailwind gray; `rust-*` and
+     `orange-*` both resolve to Tailwind's real `orange` scale, matching the
+     original site's actual accent color exactly. */
+  --color-ink-50: #f9fafb;
+  --color-ink-100: #f3f4f6;
+  --color-ink-200: #e5e7eb;
+  --color-ink-400: #9ca3af;
+  --color-ink-600: #4b5563;
+  --color-ink-800: #1f2937;
+  --color-ink-900: #000000;
+
+  --color-rust-50: #fff7ed;
+  --color-rust-100: #ffedd5;
+  --color-rust-200: #fed7aa;
+  --color-rust-300: #fdba74;
+  --color-rust-400: #fb923c;
+  --color-rust-500: #f97316;
+  --color-rust-600: #ea580c;
+  --color-rust-700: #c2410c;
+  --color-rust-800: #9a3412;
+  --color-rust-900: #7c2d12;
+
+  --color-orange-50: #fff7ed;
+  --color-orange-100: #ffedd5;
+  --color-orange-200: #fed7aa;
+  --color-orange-300: #fdba74;
+  --color-orange-400: #fb923c;
+  --color-orange-500: #f97316;
+  --color-orange-600: #ea580c;
+  --color-orange-700: #c2410c;
+  --color-orange-800: #9a3412;
+  --color-orange-900: #7c2d12;
+}
+
+/* ---------------------------------------------------------------- light --- */
+:root {
+  --c-canvas: #f9fafb;
+  --c-surface: #ffffff;
+  --c-raised: #ffffff;
+  --c-sunken: #f3f4f6;
+  --c-overlay: #ffffff;
+
+  --c-line: #e5e7eb;
+  --c-line-strong: #d1d5db;
+
+  --c-ink: #000000;
+  --c-muted: #676666;
+  --c-faint: #9ca3af;
+
+  --c-brand: #f97316;
+  --c-brand-hover: #ea580c;
+  --c-brand-fg: #ffffff;
+  --c-brand-soft: #fff7ed;
+  --c-brand-ring: rgba(249, 115, 22, 0.35);
+
+  --c-positive: #10b981;
+  --c-positive-soft: #ecfdf5;
+  --c-caution: #f59e0b;
+  --c-caution-soft: #fffbeb;
+  --c-critical: #ef4444;
+  --c-critical-soft: #fef2f2;
+  --c-info: #3b82f6;
+  --c-info-soft: #eff6ff;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px -4px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 24px 48px -12px rgba(0, 0, 0, 0.22);
+}
+
+/* ----------------------------------------------------------------- dark --- */
+.dark {
+  --c-canvas: #0a0a0a;
+  --c-surface: #141414;
+  --c-raised: #1a1a1a;
+  --c-sunken: #0d0d0d;
+  --c-overlay: #1a1a1a;
+
+  --c-line: #262626;
+  --c-line-strong: #333333;
+
+  --c-ink: #f5f5f5;
+  --c-muted: #a3a3a3;
+  --c-faint: #737373;
+
+  --c-brand: #fb923c;
+  --c-brand-hover: #fdba74;
+  --c-brand-fg: #1c0a00;
+  --c-brand-soft: rgba(251, 146, 60, 0.14);
+  --c-brand-ring: rgba(251, 146, 60, 0.4);
+
+  --c-positive: #34d399;
+  --c-positive-soft: rgba(52, 211, 153, 0.13);
+  --c-caution: #fbbf24;
+  --c-caution-soft: rgba(251, 191, 36, 0.13);
+  --c-critical: #f87171;
+  --c-critical-soft: rgba(248, 113, 113, 0.13);
+  --c-info: #60a5fa;
+  --c-info-soft: rgba(96, 165, 250, 0.13);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 20px -4px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 24px 56px -12px rgba(0, 0, 0, 0.7);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    border-color: var(--c-line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--c-canvas);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    color: var(--c-ink);
+    background-color: var(--c-canvas);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: var(--c-brand-soft);
+    color: var(--c-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--c-brand);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Prices, SKUs, and dates never jitter or misread. */
+  .tnum,
+  .font-mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  /* Micro-label: the small uppercase caption used above section headers,
+     category names, and product meta — the storefront's counterpart to
+     the dashboard's `.eyebrow`. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--c-faint);
+  }
+
+  .card-shadow {
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+@keyframes ms-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ms-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Restrained entrance reveal — matches the dashboard's animate-in-up. */
+.animate-in-up {
+  animation: ms-fade-in 0.28s var(--ease-swift) both;
+}
+
+/* Shared skeleton loading block — matches the dashboard's shimmer treatment. */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--c-sunken);
+  border: 1px solid var(--c-line);
+}
+.dark .skeleton {
+  border-color: transparent;
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, var(--c-line), transparent);
+  animation: ms-shimmer 1.5s infinite;
+}
+
+/* Base Styles */
+
+button {
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+/* Mobile Menu Styles */
+@media (max-width: 768px) {
+  #nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--c-surface);
+    box-shadow: var(--shadow-md);
+    border-radius: 0 0 1rem 1rem;
+  }
+
+  #nav ul {
+    padding: 2rem 1rem;
+  }
+
+  #nav li {
+    margin-bottom: 1rem;
+  }
+
+  #nav a {
+    display: block;
+    padding: 0.75rem 0;
+    font-size: 1.125rem;
+  }
+}
+
+/* Dropdown Styles */
+.drop-holder {
+  transition: all 0.3s ease;
+}
+
+.drop-holder.opacity-100 {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+}
+
+/* Cart Dropdown */
+.cart-drop {
+  transition: all 0.3s ease;
+}
+
+.cart-drop.opacity-100 {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+}
+
+/* Search Modal */
+.search-modal {
+  backdrop-filter: blur(5px);
+}
+
+/* Product Cards */
+.product-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Footer Styles */
+#footer {
+  margin-top: auto;
+}
+
+/* Loading States */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Shimmer Animation for Skeleton Loading */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translateX(-100%);
+  animation: shimmer 2s infinite;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+}
+
+.dark .skeleton-shimmer::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    page-break-after: avoid;
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(-3deg);
+  }
+}
+
+@keyframes float-bob-y {
+  0% {
+    transform: translateY(-30px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(-30px);
+  }
+}
+
+@keyframes float-bob-x {
+  0% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(20px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes swing {
+  0%,
+  100% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-swing {
+  animation: swing 4s ease-in-out infinite;
+}
+
+@keyframes moveRight {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+}
+
+/* Swiper Pagination Custom Styles */
+.team-swiper .swiper-pagination-bullet,
+.testimonial-swiper .swiper-pagination-bullet,
+.related-products-swiper .swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background-color: var(--c-line-strong);
+  opacity: 1;
+  transition: all 0.3s;
+}
+
+.team-swiper .swiper-pagination-bullet-active,
+.testimonial-swiper .swiper-pagination-bullet-active,
+.related-products-swiper .swiper-pagination-bullet-active {
+  width: 32px;
+  background-color: var(--c-brand);
+  border-radius: 6px;
+}
+
+.team-swiper .swiper-pagination-bullet:hover,
+.testimonial-swiper .swiper-pagination-bullet:hover,
+.related-products-swiper .swiper-pagination-bullet:hover {
+  background-color: var(--c-faint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
