@@ -3,12 +3,10 @@
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import Link from "next/link";
 import { Heart, Search, ShoppingCart, User } from "lucide-react";
-import type { Locale } from "@/types";
 import { useCart } from "@/hooks/useCart";
 import useAuthStore from "@/store/authStore";
 import useWishlistStore from "@/store/wishlistStore";
 import HeaderCart from "./HeaderCart";
-import HeaderLanguageSwitcher from "./HeaderLanguageSwitcher";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export interface HeaderActionsProps {
@@ -17,7 +15,6 @@ export interface HeaderActionsProps {
   setSearchOpen: Dispatch<SetStateAction<boolean>>;
   mobileMenuOpen: boolean;
   setMobileMenuOpen: Dispatch<SetStateAction<boolean>>;
-  lang: Locale;
 }
 
 function formatBadge(count: number): string {
@@ -30,7 +27,6 @@ export default function HeaderActions({
   setSearchOpen,
   mobileMenuOpen,
   setMobileMenuOpen,
-  lang,
 }: HeaderActionsProps) {
   const [mounted, setMounted] = useState(false);
   const { itemCount } = useCart();
@@ -106,8 +102,6 @@ export default function HeaderActions({
       </button>
 
       <ThemeToggle className="hidden sm:inline-flex" />
-
-      <HeaderLanguageSwitcher lang={lang} />
 
       <button
         type="button"

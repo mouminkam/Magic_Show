@@ -68,7 +68,6 @@ export default function Header({ lang }: HeaderProps) {
                 setSearchOpen={setSearchOpen}
                 mobileMenuOpen={mobileMenuOpen}
                 setMobileMenuOpen={setMobileMenuOpen}
-                lang={lang}
               />
             </div>
           </div>

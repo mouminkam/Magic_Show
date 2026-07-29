@@ -1,9 +1,9 @@
 import type { Locale } from "@/types";
 
 export const i18nConfig = {
-  defaultLang: "ar",
+  defaultLang: "en",
   supportedLangs: ["ar", "en"],
-  fallbackLang: "ar",
+  fallbackLang: "en",
 } as const satisfies {
   defaultLang: Locale;
   supportedLangs: readonly Locale[];

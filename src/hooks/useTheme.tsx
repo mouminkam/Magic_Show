@@ -22,11 +22,15 @@ interface ThemeState {
 
 const ThemeContext = createContext<ThemeState | null>(null);
 
+/**
+ * The app defaults to light mode regardless of the OS/browser color-scheme
+ * preference — dark mode is opt-in only, via the explicit toggle. It's only
+ * skipped when a user has already chosen a theme on a previous visit.
+ */
 function readInitialTheme(): ThemeMode {
   if (typeof window === "undefined") return "light";
   const stored = window.localStorage.getItem(STORAGE_KEY);
-  if (stored === "light" || stored === "dark") return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return stored === "dark" ? "dark" : "light";
 }
 
 /**
@@ -69,4 +73,4 @@ export function useTheme(): ThemeState {
 }
 
 /** Inline, pre-hydration script: sets the class before paint so there's no flash. */
-export const THEME_INIT_SCRIPT = `(function(){try{var k="${STORAGE_KEY}";var s=localStorage.getItem(k);var d=s?s==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.classList.toggle("dark",d);document.documentElement.style.colorScheme=d?"dark":"light";}catch(e){}})();`;
+export const THEME_INIT_SCRIPT = `(function(){try{var k="${STORAGE_KEY}";var s=localStorage.getItem(k);var d=s==="dark";document.documentElement.classList.toggle("dark",d);document.documentElement.style.colorScheme=d?"dark":"light";}catch(e){}})();`;
