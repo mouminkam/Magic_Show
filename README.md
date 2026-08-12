@@ -10,6 +10,12 @@
 </p>
 
 <p align="center">
+  <a href="https://magic-show.vercel.app/">
+    <img alt="Live Demo" src="https://img.shields.io/badge/▶_LIVE_DEMO-magic--show.vercel.app-f97316?style=for-the-badge&logoColor=white" />
+  </a>
+</p>
+
+<p align="center">
   <img alt="Next.js" src="https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white" />
   <img alt="React" src="https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white" />
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white" />
@@ -30,6 +36,9 @@ and a design system that isn't just "whatever Tailwind's defaults happen to look
 It runs **entirely on an in-app mock data layer** — clone it, `npm install`, `npm run dev`, and
 you're browsing a fully populated store in seconds. No database, no `.env` file, no backend server
 to spin up first.
+
+> 🔗 **[magic-show.vercel.app](https://magic-show.vercel.app/)** is this exact repository, deployed
+> as-is — click through instead of cloning it if you just want to see it running.
 
 This is one of three sibling projects that make up the Magic Show portfolio:
 
