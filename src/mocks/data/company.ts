@@ -9,7 +9,7 @@ export const stores: Store[] = [
     address: "Al-Hamra Street 42, Abu Rummaneh, Damascus",
     city: "Damascus",
     country: "Syria",
-    phone: "+963 11 331 8820",
+    phone: "+963 11 234 5678",
     email: "damascus@magicshow.example",
     manager: "Rania Alloush",
     hours: "Sat–Thu 10:00 – 22:00 · Fri 14:00 – 22:00",

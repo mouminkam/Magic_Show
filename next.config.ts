@@ -36,12 +36,6 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
       {
-        protocol: "https",
-        hostname: "magicshow.pl-sites.com",
-        port: "",
-        pathname: "/**",
-      },
-      {
         protocol: "http",
         hostname: "localhost",
         port: "",
@@ -86,7 +80,7 @@ const nextConfig: NextConfig = {
         source: '/api/:path*',
         headers: [
           { key: 'Access-Control-Allow-Credentials', value: 'true' },
-          { key: 'Access-Control-Allow-Origin', value: process.env.NEXT_PUBLIC_SITE_URL || 'https://magicshow.pl-sites.com' },
+          { key: 'Access-Control-Allow-Origin', value: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000' },
           { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE,OPTIONS' },
           {
             key: 'Access-Control-Allow-Headers',

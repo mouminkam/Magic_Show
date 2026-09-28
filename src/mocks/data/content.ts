@@ -184,7 +184,7 @@ export const contactDetails: ContactDetailsBlock = {
   title: "CONTACT DETAIL",
   address: "Al-Hamra Street 42, Abu Rummaneh, Damascus, Syria",
   email: "hello@magicshow.example",
-  phone: "+963 11 331 8820",
+  phone: "+963 11 234 5678",
   fax: "+963 11 331 8821",
   aboutTitle: "ABOUT US",
   aboutText:
