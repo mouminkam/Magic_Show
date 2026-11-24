@@ -8,11 +8,21 @@ afterEach(() => {
 });
 
 describe("useLanguageClient", () => {
-  it("returns the default locale on the very first render (SSR-safe)", () => {
+  it("hydrates with the server default, then switches to the cookie locale", () => {
     Cookies.set("language", "ar");
-    const { result } = renderHook(() => useLanguageClient());
-    // Synchronously right after render, before the effect has run.
-    expect(result.current).toBe(i18nConfig.defaultLang);
+    const seen: string[] = [];
+    renderHook(
+      () => {
+        const language = useLanguageClient();
+        seen.push(language);
+        return language;
+      },
+      { hydrate: true },
+    );
+    // The hydration render must match what the server sent…
+    expect(seen[0]).toBe(i18nConfig.defaultLang);
+    // …and the committed value is the real one.
+    expect(seen.at(-1)).toBe("ar");
   });
 
   it("updates to the real cookie-derived locale after mount", async () => {

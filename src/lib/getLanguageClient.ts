@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import Cookies from "js-cookie";
 import type { Locale } from "@/types";
 import { i18nConfig, isLocale } from "@/locales/i18n/config";
@@ -26,22 +26,18 @@ export function getLanguageClient(): Locale {
   return isLocale(value) ? value : i18nConfig.defaultLang;
 }
 
+/** The cookie has no change event to subscribe to; it is read once per render pass. */
+const subscribe = () => () => {};
+const getServerLanguage = (): Locale => i18nConfig.defaultLang;
+
 /**
  * Hydration-safe hook for reading the active locale during render.
  *
- * The initial state always matches the server-rendered default locale, so
- * the first client render is identical to the server render. The real
- * cookie-derived value is read in a `useEffect` after mount, which triggers
- * a second, harmless re-render if it differs from the default.
+ * `useSyncExternalStore` renders with the server snapshot (the default locale)
+ * while hydrating, so the first client render is identical to the server
+ * render; React then re-renders with the real cookie value if it differs.
+ * Same guarantee as a mount effect, without the extra effect-driven state.
  */
 export function useLanguageClient(): Locale {
-  const [language, setLanguage] = useState<Locale>(() => i18nConfig.defaultLang);
-
-  useEffect(() => {
-    const value = Cookies.get("language");
-    const resolved = isLocale(value) ? value : i18nConfig.defaultLang;
-    setLanguage((current) => (current === resolved ? current : resolved));
-  }, []);
-
-  return language;
+  return useSyncExternalStore(subscribe, getLanguageClient, getServerLanguage);
 }
