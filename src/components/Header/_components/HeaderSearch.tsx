@@ -112,7 +112,7 @@ export default function HeaderSearch({ isOpen, onClose, lang }: HeaderSearchProp
         </div>
 
         <div className="p-4">
-          {/* eslint-disable-next-line jsx-a11y/no-autofocus -- the dialog exists to receive typing */}
+          {/* The dialog exists to receive typing, so the field takes focus on open. */}
           <input
             type="search"
             autoFocus

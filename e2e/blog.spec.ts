@@ -62,7 +62,6 @@ test.describe('Blog Page', () => {
 
   test('blog post detail does not crash with no content', async ({ page }) => {
     await page.goto('/blog');
-    const postLinks = page.locator('a[href*="/blog/"]');
     // If no posts exist, page should still render without white-screening
     await expect(page.locator('body')).toBeVisible({ timeout: 10000 });
     await expect(page.locator('body')).not.toBeEmpty();

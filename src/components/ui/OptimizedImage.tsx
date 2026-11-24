@@ -58,6 +58,7 @@ export default function OptimizedImage({
         <Image
           {...props}
           {...shared}
+          alt={alt}
           fill
           className={`transition-opacity duration-300 object-cover ${opacityClass}`}
         />
@@ -65,6 +66,7 @@ export default function OptimizedImage({
         <Image
           {...props}
           {...shared}
+          alt={alt}
           width={props.width}
           height={props.height}
           className={`transition-opacity duration-300 ${opacityClass}`}

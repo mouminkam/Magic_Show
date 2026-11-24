@@ -1,12 +1,14 @@
 {
-  "name": "my-next-project",
+  "name": "magic-show-storefront",
   "version": "0.1.0",
+  "description": "Magic Show storefront — Next.js 16, TypeScript, Zustand, hydration-safe English/Arabic.",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
