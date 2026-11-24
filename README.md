@@ -1,182 +1,135 @@
-<p align="center">
-  <img src=".github/assets/logo.png" alt="Magic Show" width="260" />
-</p>
+<a href="https://magic-show.vercel.app">
+  <img src=".github/assets/feed.svg" alt="FEED_02 · Magic Show — the storefront, with the store and its admin console on screen" width="100%">
+</a>
 
 <h1 align="center">Magic Show — Storefront</h1>
 
-<p align="center">
-  <em>Footwear and leather goods, lasted by hand in Damascus.<br/>
-  Built to be resoled, not replaced — and so is this codebase.</em>
-</p>
+<p align="center">Footwear and leather goods, lasted by hand in Damascus. Built to be resoled, not replaced — and so is this codebase.</p>
 
 <p align="center">
-  <a href="https://magic-show.vercel.app/">
-    <img alt="Live Demo" src="https://img.shields.io/badge/▶_LIVE_DEMO-magic--show.vercel.app-f97316?style=for-the-badge&logoColor=white" />
-  </a>
+  <a href="https://magic-show.vercel.app"><img src=".github/assets/btn-live.svg" alt="Live demo" height="44"></a>
+  <a href="https://moumen-alkamsheh.vercel.app/work/magic-show"><img src=".github/assets/btn-case.svg" alt="Case study" height="44"></a>
+  <a href="https://github.com/mouminkam"><img src=".github/assets/btn-work.svg" alt="All work" height="44"></a>
 </p>
 
-<p align="center">
-  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white" />
-  <img alt="React" src="https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white" />
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white" />
-  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?logo=tailwindcss&logoColor=white" />
-  <img alt="Tests" src="https://img.shields.io/badge/tests-jest_%2B_playwright-25c2a0" />
-</p>
+<img src=".github/assets/stack.svg" alt="Stack: Next.js 16, React 19, TypeScript, Tailwind CSS 4, Zustand, Zod, Jest, Playwright" width="100%">
 
----
+| Magic Show | Repository | Stack | Live |
+| --- | --- | --- | --- |
+| **Storefront** · this repo | [`Magic_Show`](https://github.com/mouminkam/Magic_Show) | Next.js 16 · TypeScript | [magic-show.vercel.app](https://magic-show.vercel.app) |
+| Admin console | [`Magic-Show-dashboard`](https://github.com/mouminkam/Magic-Show-dashboard) | React 19 · Vite · TanStack | [magic-show-dashboard.vercel.app](https://magic-show-dashboard.vercel.app) |
+| Backend API | [`Magic-Show-back-end-`](https://github.com/mouminkam/Magic-Show-back-end-) | Laravel 12 · Sanctum | — |
 
-## What this is
+## Overview
 
-This is the customer-facing storefront for **Magic Show** ("Magic Shoe"), a fictional footwear and
-leather goods brand built as a portfolio piece — a full, opinionated Next.js e-commerce build with
-no shortcuts taken on the parts that are usually skipped in a demo: real TypeScript everywhere,
-a properly typed mock backend instead of a pile of hardcoded arrays, hydration-safe internationalization,
-and a design system that isn't just "whatever Tailwind's defaults happen to look like."
+The customer-facing storefront for **Magic Show** ("Magic Shoe"), a fictional footwear and leather goods brand,
+built as a full e-commerce front end with nothing skipped: strict TypeScript, a typed mock backend instead of
+hard-coded arrays, hydration-safe English and Arabic, and a design system of its own.
 
-It runs **entirely on an in-app mock data layer** — clone it, `npm install`, `npm run dev`, and
-you're browsing a fully populated store in seconds. No database, no `.env` file, no backend server
-to spin up first.
+It runs **entirely on an in-app mock data layer**: `npm install`, `npm run dev`, and the store is populated. No
+database, no `.env`, no server to start first. [magic-show.vercel.app](https://magic-show.vercel.app) is this
+repository, deployed as-is.
 
-> 🔗 **[magic-show.vercel.app](https://magic-show.vercel.app/)** is this exact repository, deployed
-> as-is — click through instead of cloning it if you just want to see it running.
+## Highlights
 
-This is one of three sibling projects that make up the Magic Show portfolio:
+- **The whole storefront flow** — browse, filter, open a product, add to cart, check out, get a confirmation, leave
+  and come back to the same cart, wishlist and session (persisted in `localStorage`).
+- **A real blog** — article pages with hero, byline, reading time, threaded comments and related posts.
+- **Store locator** on an interactive Leaflet map.
+- **Full auth flow** — register, log in, forgot and reset password, including the validation and error paths.
+- **English and Arabic**, right-to-left included, with a locale system that survives server rendering without a
+  hydration mismatch (see Engineering notes).
+- **Brand identity carried over faithfully** — accent `#f97316` on a black-and-gray scale, the real "MAGIC SHOE"
+  mark at its true aspect ratio, and design tokens shaped like the admin console's, so both read as one product.
 
-| Project | Stack | Role |
-| --- | --- | --- |
-| **Storefront** *(this repo)* | Next.js 16 + TypeScript | The public-facing shop |
-| Admin dashboard | React + Vite + TypeScript | The internal console staff would use to run the store |
-| Backend API | Laravel 12 | The real REST API the frontends are modeled against |
+## Architecture
 
-Each one runs standalone on its own mock/seed data, so you can clone and evaluate any single piece
-without the other two.
+```text
+src/
+├── app/          App Router routes. Every route has the same shape: an async Server Component calls the
+│                 mock service layer and hands the promise to a client "Stream" component inside <Suspense>.
+├── mocks/        The mock backend: seed data plus a typed, Promise-returning service layer that simulates
+│                 latency, pagination and search — swapping in the real API touches only this folder.
+├── types/        Domain models: Product, Order, Cart, Customer, BlogPost…
+├── store/        Zustand stores: cart, wishlist, auth, toast, theme.
+├── hooks/        Shared hooks: cart helpers, theme, language.
+├── lib/          Utilities, Zod schemas, formatters, phone-number normalization, i18n helpers.
+├── components/   Shared UI: Header, Footer, Logo, design-system primitives.
+└── locales/      i18n config and the English and Arabic dictionaries.
+e2e/              Playwright specs, one per user journey.
+```
+
+**Data flow:** `app/*` (Server Component) → `mocks/*` service → promise → client `Stream` component →
+Zustand stores for anything the visitor changes.
+
+| Route | What it is |
+| --- | --- |
+| `/home` | Hero, featured categories, best sellers, new arrivals, blog, newsletter |
+| `/shop`, `/shop/[id]` | Listing with price, size, color and season filters · product detail with variants |
+| `/cart`, `/checkout`, `/order-confirmation/[id]` | Quantities and coupons · shipping and payment · confirmation |
+| `/wishlist`, `/profile` | Saved items · account details, order history |
+| `/blog`, `/blog/[id]` | Article list and detail |
+| `/about-us`, `/contact-us`, `/stores` | Brand story · contact form and map · store locator |
+| `/login`, `/register`, `/forgot-password`, `/reset-password` | Auth |
 
 ## Getting started
 
 ```bash
 npm install
-npm run dev
+npm run dev        # http://localhost:3000
 ```
 
-Open **http://localhost:3000**. That's it — no environment variables, no seeding step, nothing to
-configure. Every product, order, blog post, review, store location, and customer account is
-generated the moment the app boots.
+No environment variables, no seeding step: every product, order, post, review, store and account is generated
+when the app boots.
 
-```bash
-npm run build          # production build
-npm start                # serve the production build
-npm run lint             # eslint
-npm test                  # jest — unit tests
-npm run test:watch       # jest --watch
-npm run test:coverage    # jest --coverage
-npm run test:e2e          # playwright — starts its own dev server
-```
+## Scripts
 
-## What's actually in the box
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Development server |
+| `npm run build` · `npm start` | Production build · serve it |
+| `npm run lint` | ESLint (house config) |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm test` | Jest unit tests (`test:watch`, `test:coverage` too) |
+| `npm run test:e2e` | Playwright end-to-end tests; starts its own dev server |
 
-- **Full storefront flow** — browse, filter, view a product, add to cart, check out, receive an
-  order confirmation, leave the site, come back, and your cart/wishlist/session are still there
-  (persisted via `localStorage`).
-- **Blog** with a real article detail page — hero, author byline, reading time, threaded comments,
-  related posts — not just a list of titles that go nowhere.
-- **Store locator** with an interactive Leaflet map.
-- **Full auth flow** — register, log in, forgot/reset password — running against the mock layer,
-  including the edge cases (invalid credentials, validation errors) that get skipped in most demos.
-- **Bilingual** (English/Arabic), with correct RTL handling and a locale system built to survive
-  server-side rendering without a hydration mismatch (see below — this is a real, easy-to-get-wrong
-  problem that this codebase handles deliberately, not by accident).
+CI runs lint, typecheck, unit tests and the build on every push and pull request.
 
-## Brand identity
+## Engineering notes
 
-The accent color is **`#f97316`**, on a black-and-gray neutral scale — this is the brand's actual
-identity, carried over faithfully rather than reinvented. It's shared in architecture with the
-admin dashboard's own design tokens (same variable names, same shape), so the two apps read as one
-product family even though they're built with entirely different tools.
+### Hydration-safe internationalization
 
-The logo above is the brand's real mark — a "MAGIC SHOE" wordmark with a three-bar angled icon.
-`src/components/Logo/Logo.tsx` renders it at its true aspect ratio instead of squashing it into a
-square tile, and the browser tab icon is cropped directly from that same icon mark, so the tab and
-the header are never out of sync with each other.
+The default locale is **Arabic**, read on the server from a cookie. Reading that same cookie during a client render
+is the classic hydration bug: the client already has the cookie, so its first render disagrees with the HTML the
+server sent. `src/lib/getLanguageClient.ts` keeps two tools apart:
 
-## Routes
+- **`useLanguageClient()`** — for anything read during render. It is built on `useSyncExternalStore`, which renders
+  with the server snapshot (the default locale) while hydrating and then switches to the real cookie value, so the
+  first client render always matches the server.
+- **`getLanguageClient()`** — a plain function for event handlers and callbacks, where there is no server render
+  to disagree with.
 
-```
-/home                      hero, featured categories, best sellers, new arrivals, blog, newsletter
-/shop                      product listing — price/size/color/season filters
-/shop/[id]                 product detail — gallery, variant selection, add to cart
-/cart                      cart with quantity edit and coupon application
-/checkout                  shipping + payment, order placement
-/order-confirmation/[id]   post-purchase confirmation
-/wishlist                  saved items
-/blog  /blog/[id]           article list and detail (hero, full body, comments, related posts)
-/about-us                  brand story, stats, team, testimonials
-/contact-us                contact form + map
-/stores                    store locator
-/login /register /forgot-password /reset-password
-/profile                   account details, order history, wishlist tab
-```
-
-## How it's put together
-
-```
-src/
-  app/            Next.js App Router routes. Every route follows the same
-                   data-fetching shape throughout the app: an async Server
-                   Component calls the mock service layer and hands the
-                   resulting promise to a client "Stream" component wrapped
-                   in <Suspense> — so the same pattern you learn on one page
-                   works everywhere else too.
-  mocks/          The mock backend: seed data plus a typed, Promise-returning
-                   service layer that simulates latency, pagination, and
-                   search — used exactly the way a real REST client would be,
-                   so swapping in a real API later touches only this folder.
-  types/          Domain models (Product, Order, Cart, Customer, BlogPost, …).
-  store/          Zustand stores — cart, wishlist, auth, toast, theme.
-  hooks/           Shared hooks (cart helpers, theme, language).
-  lib/            Utilities, zod validation schemas, formatters, phone-number
-                   normalization, and the i18n language-reading helpers.
-  components/     Shared UI — Header, Footer, Logo, design-system primitives.
-  locales/        i18n config and translation dictionaries (English + Arabic).
-```
-
-### A worked example: hydration-safe internationalization
-
-The default locale is **Arabic**, read server-side from a cookie. That sounds simple until you
-need to read that same preference on the client — and this is exactly the kind of detail that
-looks fine in a demo and then breaks the moment a real user with a saved preference visits your
-site. If a Client Component reads `document.cookie` directly during render, React's hydration pass
-runs on the client where the cookie already exists, so the very first client render disagrees with
-what the server actually sent — a hydration mismatch.
-
-This codebase solves it with two clearly separated tools in `src/lib/getLanguageClient.ts`:
-
-- **`useLanguageClient()`** — a hook. Its first return value always matches the server-rendered
-  default, then updates to the real cookie value inside a `useEffect` once mounted. **Use this
-  anywhere you read the language during render.**
-- **`getLanguageClient()`** — a plain function for event handlers/callbacks only (a submit handler,
-  a click handler), where there's no server render to disagree with.
-
-It's a small thing, but it's the difference between a demo that happens to work in English and a
-storefront that actually works correctly for a bilingual audience.
+The test suite checks exactly that contract: hydrate with a cookie set, and the first render returns the default
+while the committed value is the cookie's.
 
 ### Testing
 
-- **Unit tests** (`npm test`) — Jest + Testing Library. Coverage is deliberately concentrated on
-  the logic that's easy to get subtly wrong: cart totals and stock-clamping, phone number
-  normalization across countries, API error message extraction, image fallback resolution, and the
-  hydration-safe language hook described above.
-- **End-to-end tests** (`npm run test:e2e`) — Playwright, one spec per major user journey (home,
-  auth, shop, cart/checkout/wishlist, blog, contact/about, stores, header navigation). These spin
-  up their own dev server automatically.
+- **Unit tests** (`npm test`) — Jest and Testing Library, concentrated on logic that is easy to get subtly wrong:
+  cart totals and stock clamping, phone-number normalization, API error extraction, image fallbacks, and the
+  locale hook above. 75 tests in 9 suites.
+- **End-to-end tests** (`npm run test:e2e`) — Playwright, one spec per journey: home, auth, shop,
+  cart/checkout/wishlist, blog, contact/about, stores, header navigation.
 
 ## Honest trade-offs
 
-Nobody's portfolio project is finished, and pretending otherwise isn't useful to anyone evaluating
-this code:
+- Every route renders dynamically, with no ISR. Right for a demo on mock data; a real deployment should add
+  `revalidate` to product and blog pages.
+- This storefront and the admin console are two independent mock-data apps; neither calls the Laravel API yet.
+  The mock service layer exists so that swap stays small and contained.
+- ESLint reports **no errors and 14 warnings**: 12 from `react-hooks/set-state-in-effect` (loading flags, form
+  resets on open, URL sync and mount flags that work today and can move to derived state or
+  `useSyncExternalStore`), and 2 `exhaustive-deps` notes in the store locator.
 
-- Every route renders dynamically with no ISR/`revalidate` caching — the right call for a demo on
-  mock data, but a real production deployment serving content that doesn't change every request
-  (product pages, blog posts) should add `export const revalidate = ...` to cut render cost.
-- This storefront and the admin dashboard are two independent mock-data apps — neither is wired to
-  the Laravel backend in this portfolio. Connecting them is a deliberate next step, not an
-  oversight; the mock service layer exists specifically so that swap is a small, contained change.
+<a href="https://github.com/mouminkam">
+  <img src=".github/assets/footer.svg" alt="End of feed — FEED_02 · Magic Show, storefront · by Moumen Alkamsheh" width="100%">
+</a>
