@@ -5,8 +5,9 @@ import nextTs from "eslint-config-next/typescript";
 /**
  * House ESLint config — identical in every Next.js repository on github.com/mouminkam.
  *
- * `react-hooks/set-state-in-effect` is a warning rather than an error: it flags mount
- * and sync effects that work today, and each one is tracked in the README's trade-offs.
+ * Advisory rules are warnings, not errors: the React Compiler checks (set-state-in-effect,
+ * preserve-manual-memoization) flag code that works today, and `any` marks typing debt.
+ * Warnings stay visible in every run and are counted in each README's trade-offs.
  */
 export default defineConfig([
   ...nextVitals,
@@ -14,11 +15,13 @@ export default defineConfig([
   {
     rules: {
       "react-hooks/set-state-in-effect": "warn",
+      "react-hooks/preserve-manual-memoization": "warn",
+      "@typescript-eslint/no-explicit-any": "warn",
     },
   },
   {
-    // CommonJS config and tooling files (jest.config.js, scripts) load modules with require().
-    files: ["**/*.js", "**/*.cjs"],
+    // CommonJS config files and Jest tests (jest.mock factories) load modules with require().
+    files: ["**/*.js", "**/*.cjs", "**/__tests__/**", "**/*.test.{ts,tsx}"],
     rules: {
       "@typescript-eslint/no-require-imports": "off",
     },
